@@ -1,7 +1,25 @@
 import { ThumbsUp, Trash } from "phosphor-react";
+import { useState } from "react";
 import styles from "./comments.module.scss";
 
-export function Comments() {
+interface CommentsProps {
+  comment: string;
+  deleteComment: (deletedComment: string) => void;
+}
+
+export function Comments({ comment, deleteComment }: CommentsProps) {
+  const [likeCount, setLikeCount] = useState(0);
+
+  function handleDeleteComment() {
+    deleteComment(comment);
+  }
+
+  function handleLikeComment() {
+    setLikeCount((previousState) => {
+      return previousState + 1;
+    });
+  }
+
   return (
     <div className={styles.comments}>
       <img src="http://github.com/ericDK89.png" />
@@ -14,17 +32,20 @@ export function Comments() {
               <time>Cerca de 2h</time>
             </div>
 
-            <button type="button" title="Deletar comentário">
+            <button
+              type="button"
+              title="Deletar comentário"
+              onClick={handleDeleteComment}
+            >
               <Trash size={24} />
             </button>
           </header>
-
-          <p>Muito bom Devon, parabéns!! 👏👏</p>
+          <p>{comment}</p>
         </div>
 
         <footer className={styles.commentsFooter}>
-          <button type="button">
-            <ThumbsUp size={24} /> Aplaudir <span>03</span>
+          <button type="button" onClick={handleLikeComment}>
+            <ThumbsUp size={24} /> Aplaudir <span>{likeCount}</span>
           </button>
         </footer>
       </main>
