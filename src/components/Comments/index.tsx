@@ -1,17 +1,41 @@
+import { format, formatDistanceToNow, formatISO } from "date-fns";
+import ptBR from "date-fns/esm/locale/pt-BR/index.js";
 import { ThumbsUp, Trash } from "phosphor-react";
 import { useState } from "react";
 import styles from "./comments.module.scss";
 
 interface CommentsProps {
+  commentId: string;
   comment: string;
-  deleteComment: (deletedComment: string) => void;
+  commentPublishedAt: Date;
+  deleteComment: (id: string) => void;
 }
 
-export function Comments({ comment, deleteComment }: CommentsProps) {
+export function Comments({
+  comment,
+  commentPublishedAt,
+  deleteComment,
+  commentId,
+}: CommentsProps) {
   const [likeCount, setLikeCount] = useState(0);
 
+  const timeFormateToNow = formatDistanceToNow(commentPublishedAt, {
+    locale: ptBR,
+    addSuffix: true,
+  });
+
+  const timeFormat = format(
+    commentPublishedAt,
+    "EEEE d 'de' MMMM 'ás' HH:mm'h'",
+    {
+      locale: ptBR,
+    }
+  );
+
+  const timeFormatIso = formatISO(commentPublishedAt);
+
   function handleDeleteComment() {
-    deleteComment(comment);
+    deleteComment(commentId);
   }
 
   function handleLikeComment() {
@@ -29,7 +53,9 @@ export function Comments({ comment, deleteComment }: CommentsProps) {
           <header>
             <div className={styles.authorInfo}>
               <strong>Eric Macedo</strong>
-              <time>Cerca de 2h</time>
+              <time title={timeFormat} dateTime={timeFormatIso}>
+                {timeFormateToNow}
+              </time>
             </div>
 
             <button

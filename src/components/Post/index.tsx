@@ -1,6 +1,7 @@
 import { format, formatDistanceToNow, formatISO } from "date-fns";
 import ptBR from "date-fns/esm/locale/pt-BR/index.js";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { v4 as uuidV4 } from "uuid";
 import { Author, Content } from "../../services/api/posts";
 import { Comments } from "../Comments";
 import styles from "./post.module.scss";
@@ -11,8 +12,14 @@ interface PostProps {
   publishedAt: Date;
 }
 
+interface Comment {
+  id: string;
+  content: string;
+  commentPublishedAt: Date;
+}
+
 export function Post({ author, content, publishedAt }: PostProps) {
-  const [comments, setComments] = useState(["Post muito bacana"]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [newCommentText, setNewCommentText] = useState("");
   const { avatarUrl, name, role } = author;
 
@@ -34,16 +41,19 @@ export function Post({ author, content, publishedAt }: PostProps) {
 
   function handleCreateNewComment(e: FormEvent<HTMLFormElement>): void {
     e.preventDefault();
-    setComments((previousState) => [...previousState, newCommentText]);
+    const id = uuidV4();
+    setComments((previousState) => [
+      ...previousState,
+      { id, content: newCommentText, commentPublishedAt: new Date() },
+    ]);
     setNewCommentText("");
   }
 
-  function handleDeleteComment(deletedComment: string) {
-    const commentsWithoutDeletedOne = comments.filter(
-      (comment) => comment !== deletedComment
+  function deleteComment(deletedContentId: string) {
+    const commentListWithoutDeletedOne = comments.filter(
+      (comment) => comment.id !== deletedContentId
     );
-
-    setComments(commentsWithoutDeletedOne);
+    setComments(commentListWithoutDeletedOne);
   }
 
   function handleInvalidComment(e: FormEvent<HTMLTextAreaElement>): void {
@@ -70,13 +80,13 @@ export function Post({ author, content, publishedAt }: PostProps) {
       </header>
 
       <main className={styles.postMain}>
-        {content.map((item) => {
-          if (item.type === "paragraph") {
-            return <p key={item.content}>{item.content}</p>;
+        {content.map((content) => {
+          if (content.type === "paragraph") {
+            return <p key={content.id}>{content.content}</p>;
           } else {
             return (
-              <p key={item.content}>
-                <a href={item.content}>{item.content}</a>
+              <p key={content.id}>
+                <a href={content.content}>{content.content}</a>
               </p>
             );
           }
@@ -107,9 +117,11 @@ export function Post({ author, content, publishedAt }: PostProps) {
       {comments.map((comment) => {
         return (
           <Comments
-            key={comment}
-            comment={comment}
-            deleteComment={handleDeleteComment}
+            key={comment.id}
+            commentId={comment.id}
+            comment={comment.content}
+            deleteComment={deleteComment}
+            commentPublishedAt={comment.commentPublishedAt}
           />
         );
       })}
