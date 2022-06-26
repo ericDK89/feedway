@@ -28,7 +28,7 @@ $ yarn
 $ yarn dev
 ```
 
-Ou pode acessar o site através desse link: [https://portfolio-ericdk89.vercel.app/](https://portfolio-ericdk89.vercel.app/)
+Ou pode acessar o site através desse link: [https://feedway.vercel.app/](https://feedway.vercel.app/)
 
 ## 💻 Projeto
 
