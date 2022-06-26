@@ -32,7 +32,7 @@ Ou pode acessar o site através desse link: [https://portfolio-ericdk89.vercel.a
 
 ## 💻 Projeto
 
-Esse é meu portfólio pessoal, onde pretendo sempre estar atualzando conforme realizo novos projetos. Pensando nisso criei o site do porftólio puxando os 
-dados direatmente do GraphCMS. Sendo assim para adicionar um novo projeto basta entrar na minha conta no site [GraphCMS](https://app.graphcms.com/) e criar um novo contéudo, que irá aparecer automaticamente em meu portfólio. 
+Feed Way é uma página de posts, onde é possível realizar um post, e outros usuários vão poder comentar sobre seu post. Os comentários possuem um 
+sistema de aplaudir, que seria um botão de gostei, além de poder excluir os mesmos. 
 
 Feito por Eric Macedo 🌌  [LinkedIn](https://www.linkedin.com/in/eric-macedo-dev/)
